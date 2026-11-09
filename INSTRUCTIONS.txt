@@ -1,0 +1,25 @@
+STAGE 1 - HOW TO UPLOAD TO GITHUB (do not upload this file)
+
+1. Unzip this file on your computer.
+2. Go to https://github.com/matchescs55/neuro-methodologies
+3. Click "Add file" > "Upload files".
+4. Drag in the "app" folder AND the ".env.example" file.
+   (When asked, these REPLACE the existing app/globals.css, app/layout.tsx, app/page.tsx.)
+   Do NOT delete app/favicon.ico - it is not in this zip, so it stays untouched.
+5. Commit the changes.
+
+EDIT .gitignore ON GITHUB (I could not see your file, so I did not include one):
+1. Open .gitignore in the repo, click the pencil icon.
+2. Add these lines at the bottom:
+
+# Visual Studio
+.vs/
+
+# Keep the safe env template in Git
+!.env.example
+
+3. Commit.
+
+TEST: Vercel will redeploy automatically. Open your site: you should see a dark navy
+page, a floating gradient orb and a cyan-to-purple "Neuro Methodologies" title.
+If you work locally too, run: git pull, npm run dev, npm run build.
