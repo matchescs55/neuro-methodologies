@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { SynthiaAvatar } from "./SynthiaAvatar";
 import type { SynthiaState } from "./synthia-states";
 import { GREETING, GUIDE_TOPICS } from "../../lib/synthia-guide";
+import { useProgress } from "../progress/ProgressProvider";
 
 type View =
   | { kind: "welcome" }
@@ -11,10 +12,12 @@ type View =
   | { kind: "challenge"; topic: number; picked: number | null };
 
 export function SynthiaGuide() {
+  const { progress, markTip, markAttempt, markMastered } = useProgress();
+  const done = progress.mastered;
+
   const [view, setView] = useState<View>({ kind: "welcome" });
   const [bubble, setBubble] = useState(GREETING);
   const [mood, setMood] = useState<SynthiaState>("idle");
-  const [done, setDone] = useState<number[]>([]);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Stop any pending timer when the component disappears.
@@ -36,6 +39,7 @@ export function SynthiaGuide() {
 
   function pickTopic(i: number) {
     setView({ kind: "tip", topic: i, tip: 0 });
+    markTip(i, 0);
     speak(GUIDE_TOPICS[i].tips[0]);
   }
 
@@ -45,23 +49,31 @@ export function SynthiaGuide() {
     if (view.tip < topic.tips.length - 1) {
       const next = view.tip + 1;
       setView({ kind: "tip", topic: view.topic, tip: next });
+      markTip(view.topic, next);
       speak(topic.tips[next]);
     } else {
-      setView({ kind: "challenge", topic: view.topic, picked: null });
-      speak("Challenge time! Pick the best answer.");
+      startChallenge(view.topic);
     }
+  }
+
+  function startChallenge(topicIndex: number) {
+    setView({ kind: "challenge", topic: topicIndex, picked: null });
+    speak("Challenge time! Pick the best answer.");
   }
 
   function answer(optionIndex: number) {
     if (view.kind !== "challenge") return;
-    const topic = GUIDE_TOPICS[view.topic];
+    const topicIndex = view.topic;
+    const topic = GUIDE_TOPICS[topicIndex];
     const correct = optionIndex === topic.challenge.correctIndex;
-    setView({ kind: "challenge", topic: view.topic, picked: optionIndex });
+    setView({ kind: "challenge", topic: topicIndex, picked: optionIndex });
+    markAttempt();
 
     if (correct) {
-      const nextDone = done.includes(view.topic) ? done : [...done, view.topic];
-      setDone(nextDone);
-      if (nextDone.length === GUIDE_TOPICS.length) {
+      const already = done.includes(topicIndex);
+      markMastered(topicIndex);
+      const count = already ? done.length : done.length + 1;
+      if (count === GUIDE_TOPICS.length) {
         speak(
           "You mastered all five topics! You are a true neuro-learner. Fantastic work!",
           "celebrating",
@@ -118,6 +130,12 @@ export function SynthiaGuide() {
           {bubble}
         </div>
 
+        {view.kind === "welcome" && (
+          <p className="text-sm font-semibold text-neon-cyan">
+            Step 1: choose a topic below to begin.
+          </p>
+        )}
+
         {/* Topic picker */}
         <div className="flex flex-wrap gap-2">
           {GUIDE_TOPICS.map((t, i) => (
@@ -139,7 +157,7 @@ export function SynthiaGuide() {
 
         {/* Tip controls */}
         {view.kind === "tip" && (
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             <button
               type="button"
               onClick={nextTip}
@@ -149,6 +167,15 @@ export function SynthiaGuide() {
                 ? "Next tip"
                 : "Take the challenge"}
             </button>
+            {view.tip < GUIDE_TOPICS[view.topic].tips.length - 1 && (
+              <button
+                type="button"
+                onClick={() => startChallenge(view.topic)}
+                className="rounded-full border border-white/20 bg-white/5 px-5 py-3 text-sm font-medium transition hover:border-neon-violet hover:bg-neon-violet/15"
+              >
+                Skip to challenge
+              </button>
+            )}
             <span className="text-sm text-soft-purple/70">
               Tip {view.tip + 1} of {GUIDE_TOPICS[view.topic].tips.length}
             </span>
