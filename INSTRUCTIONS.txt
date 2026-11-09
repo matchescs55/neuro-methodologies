@@ -1,15 +1,10 @@
-STAGE 2 - SYNTHIA AVATAR (do not upload this file)
+STAGE 3 - HOMEPAGE (do not upload this file)
 
-Upload to GitHub (Add file > Upload files), keeping the folder structure:
-  components/synthia/SynthiaAvatar.tsx   (NEW)
-  components/synthia/synthia-states.ts   (NEW)
-  app/page.tsx                           (REPLACES the Stage 1 test page)
+Drag these folders from the unzipped folder into GitHub (Add file > Upload files):
+  app/                         (REPLACES app/page.tsx)
+  components/sections/         (7 NEW files)
+  components/ui/               (1 NEW file)
+  lib/                         (1 NEW file, in the project ROOT next to app)
 
-Easiest: drag the "components" folder and the "app" folder from the unzipped
-folder into the GitHub upload page, then commit.
-
-The "components" folder goes in the project ROOT, next to "app" (not inside it).
-
-TEST: after Vercel redeploys, open the site. You should see SYNTHIA, a glowing
-blob with a dark visor face. Click the five buttons: idle, listening, thinking,
-speaking, celebrating. Each one should animate differently.
+Your Stage 2 files in components/synthia/ are NOT in this zip and stay untouched.
+Commit message: Stage 3: homepage sections
