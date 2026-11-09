@@ -16,7 +16,7 @@ export function Footer() {
         </ul>
       </div>
       <p className="mt-8 text-center text-xs text-soft-purple/50">
-        © {new Date().getFullYear()} Neuro Methodologies. All rights reserved.
+        © 2026 Neuro Methodologies. All rights reserved.
       </p>
     </footer>
   );
