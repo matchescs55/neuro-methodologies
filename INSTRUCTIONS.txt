@@ -1,25 +1,15 @@
-STAGE 1 - HOW TO UPLOAD TO GITHUB (do not upload this file)
+STAGE 2 - SYNTHIA AVATAR (do not upload this file)
 
-1. Unzip this file on your computer.
-2. Go to https://github.com/matchescs55/neuro-methodologies
-3. Click "Add file" > "Upload files".
-4. Drag in the "app" folder AND the ".env.example" file.
-   (When asked, these REPLACE the existing app/globals.css, app/layout.tsx, app/page.tsx.)
-   Do NOT delete app/favicon.ico - it is not in this zip, so it stays untouched.
-5. Commit the changes.
+Upload to GitHub (Add file > Upload files), keeping the folder structure:
+  components/synthia/SynthiaAvatar.tsx   (NEW)
+  components/synthia/synthia-states.ts   (NEW)
+  app/page.tsx                           (REPLACES the Stage 1 test page)
 
-EDIT .gitignore ON GITHUB (I could not see your file, so I did not include one):
-1. Open .gitignore in the repo, click the pencil icon.
-2. Add these lines at the bottom:
+Easiest: drag the "components" folder and the "app" folder from the unzipped
+folder into the GitHub upload page, then commit.
 
-# Visual Studio
-.vs/
+The "components" folder goes in the project ROOT, next to "app" (not inside it).
 
-# Keep the safe env template in Git
-!.env.example
-
-3. Commit.
-
-TEST: Vercel will redeploy automatically. Open your site: you should see a dark navy
-page, a floating gradient orb and a cyan-to-purple "Neuro Methodologies" title.
-If you work locally too, run: git pull, npm run dev, npm run build.
+TEST: after Vercel redeploys, open the site. You should see SYNTHIA, a glowing
+blob with a dark visor face. Click the five buttons: idle, listening, thinking,
+speaking, celebrating. Each one should animate differently.
